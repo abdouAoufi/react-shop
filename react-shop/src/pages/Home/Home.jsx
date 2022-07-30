@@ -4,11 +4,20 @@ import Navbar from "../../components/Navbar";
 import AXIOS_INSTANCE from "../../Api/base";
 import Product from "../../components/Product";
 import Loading from "../../components/Loading";
+import { ifUserLogged } from "../../database/users";
+import { useNavigate } from "react-router";
 
 const Home = () => {
   const [listProducts, setListProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!ifUserLogged()) {
+      navigate("/login");
+    }
+  }, []);
 
   useEffect(() => {
     AXIOS_INSTANCE.get("/react-shop")
@@ -20,7 +29,7 @@ const Home = () => {
   }, []);
 
   const addToCart = (price) => {
-    setTotal(total + price)
+    setTotal(total + price);
   };
 
   return (
