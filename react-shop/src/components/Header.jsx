@@ -1,11 +1,15 @@
-const Header = () => {
+const DEFAULT_TITLE = " Welcome to our shop";
+const DEFAULT_SUB_TITLE = " You can discover products. buy or even sell";
+
+const Header = (props) => {
+  const { title, subTitle } = props;
   return (
     <header className='mt-8'>
       <p className='text-center text-3xl font-bold text-blue-500'>
-        Welcome to our shop
+        {title || DEFAULT_TITLE}
       </p>
       <p className='mt-4 text-center text-xl font-semibold'>
-        You can discover products. buy or even sell
+        {subTitle || DEFAULT_SUB_TITLE}
       </p>
     </header>
   );
