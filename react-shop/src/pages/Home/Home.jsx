@@ -8,6 +8,7 @@ import Loading from "../../components/Loading";
 const Home = () => {
   const [listProducts, setListProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     AXIOS_INSTANCE.get("/react-shop")
@@ -18,9 +19,13 @@ const Home = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const addToCart = (price) => {
+    setTotal(total + price)
+  };
+
   return (
     <React.Fragment>
-      <Navbar />
+      <Navbar total={total} />
       <Header
         title='Discover our Daily product'
         subTitle='Today we go a lot of products waiting for you!'
@@ -36,6 +41,7 @@ const Home = () => {
               price={product.price}
               discount={product.discount}
               imgSrc={product.imgSrc}
+              addToCart={addToCart}
             />
           ))}
         </div>

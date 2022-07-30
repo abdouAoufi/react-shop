@@ -1,6 +1,7 @@
 import { NavLink as Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const { total } = props;
   return (
     <nav className='py-4 px-6 shadow '>
       <div className='flex justify-between'>
@@ -15,6 +16,12 @@ const Navbar = () => {
           <Link to='/home' className='font-bold text-lg mx-2'>
             Home
           </Link>
+
+          {total !== undefined ? (
+            <p className='font-bold text-lg mx-2 text-blue-400'>
+              Total : {total || 0} DA
+            </p>
+          ) : null}
         </div>
       </div>
     </nav>
