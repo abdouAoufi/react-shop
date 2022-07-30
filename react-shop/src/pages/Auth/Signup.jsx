@@ -1,9 +1,11 @@
 import Button from "../../components/Button";
+import Navbar from "../../components/Navbar";
 import Header from "../../components/Header";
 
 const SignUp = () => {
   return (
     <div>
+      <Navbar />
       <Header />
 
       <div className='flex justify-center flex-col  items-center mt-16 '>
@@ -27,7 +29,7 @@ const SignUp = () => {
           className='p-4 text-md block border-2 rounded my-2 w-2/6'
           type='password'
         />
-       <Button text="Sign up" />
+        <Button text='Sign up' />
       </div>
     </div>
   );
