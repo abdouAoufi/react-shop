@@ -8,11 +8,13 @@ import { ifUserLogged } from "../../database/users";
 import { useNavigate } from "react-router";
 
 const totalInStorage = localStorage.getItem("total");
+const productCartStorage = JSON.parse(localStorage.getItem("productsCart"));
 
 const Home = () => {
   const [listProducts, setListProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [total, setTotal] = useState( parseInt(totalInStorage) || 0);
+  const [total, setTotal] = useState(parseInt(totalInStorage) || 0);
+  const [cartListProducts, setListCart] = useState(productCartStorage || []);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,9 +32,13 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
-  useEffect(getData, []); // Dependency Array
+  useEffect(getData, []);
 
-  const addToCart = (price) => {
+  const addToCart = (product) => {
+    const currentList = cartListProducts;
+    currentList.push(product);
+    setListCart(currentList);
+    const { price } = product;
     setTotal(total + price);
   };
 
@@ -40,11 +46,15 @@ const Home = () => {
     localStorage.setItem("total", total);
   };
 
-  useEffect(saveToLocalStorage, [total]);
+  useEffect(() => {
+    localStorage.setItem("productsCart", JSON.stringify(cartListProducts));
+  }, [cartListProducts]);
+
+  useEffect(saveToLocalStorage, [total]); // ! Dependency Array it call saveToLocalStorage if total changes
 
   return (
     <React.Fragment>
-      <Navbar total={total} />
+      <Navbar total={total} listProducts={cartListProducts} />
       <Header
         title='Discover our Daily product'
         subTitle='Today we go a lot of products waiting for you!'

@@ -20,7 +20,9 @@ export const ifUserLogged = () => {
 };
 
 export const logout = () => {
-  localStorage.removeItem("user")
+  localStorage.removeItem("total");
+  localStorage.removeItem("productsCart")
+  localStorage.removeItem("user");
 };
 
 export const getUsers = () => users;
