@@ -7,10 +7,12 @@ import Loading from "../../components/Loading";
 import { ifUserLogged } from "../../database/users";
 import { useNavigate } from "react-router";
 
+const totalInStorage = localStorage.getItem("total");
+
 const Home = () => {
   const [listProducts, setListProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState( parseInt(totalInStorage) || 0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,18 +21,26 @@ const Home = () => {
     }
   }, []);
 
-  useEffect(() => {
+  const getData = () => {
     AXIOS_INSTANCE.get("/react-shop")
       .then((response) => {
         setListProducts(response.data);
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
+
+  useEffect(getData, []); // Dependency Array
 
   const addToCart = (price) => {
     setTotal(total + price);
   };
+
+  const saveToLocalStorage = () => {
+    localStorage.setItem("total", total);
+  };
+
+  useEffect(saveToLocalStorage, [total]);
 
   return (
     <React.Fragment>
