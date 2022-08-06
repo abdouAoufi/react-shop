@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Navbar from "../../components/Navbar";
 import AXIOS_INSTANCE from "../../Api/base";
@@ -9,6 +9,8 @@ import { useNavigate } from "react-router";
 
 const totalInStorage = localStorage.getItem("total");
 const productCartStorage = JSON.parse(localStorage.getItem("productsCart"));
+
+export const TotalContext = createContext(); // important
 
 const Home = () => {
   const [listProducts, setListProducts] = useState([]);
@@ -53,29 +55,31 @@ const Home = () => {
   useEffect(saveToLocalStorage, [total]); // ! Dependency Array it call saveToLocalStorage if total changes
 
   return (
-    <React.Fragment>
-      <Navbar total={total} listProducts={cartListProducts} />
-      <Header
-        title='Discover our Daily product'
-        subTitle='Today we go a lot of products waiting for you!'
-      />
+    <TotalContext.Provider value={{ cartListProducts, setListCart }}>
+      <React.Fragment>
+        <Navbar listProducts={cartListProducts} />
+        <Header
+          title='Discover our Daily product'
+          subTitle='Today we go a lot of products waiting for you!'
+        />
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className='grid justify-between gap-4 w-full place-content-center px-8 my-24  gap-y-8 md:grid-cols-4'>
-          {listProducts.map((product) => (
-            <Product
-              title={product.title}
-              price={product.price}
-              discount={product.discount}
-              imgSrc={product.imgSrc}
-              addToCart={addToCart}
-            />
-          ))}
-        </div>
-      )}
-    </React.Fragment>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className='grid justify-between gap-4 w-full place-content-center px-8 my-24  gap-y-8 md:grid-cols-4'>
+            {listProducts.map((product) => (
+              <Product
+                title={product.title}
+                price={product.price}
+                discount={product.discount}
+                imgSrc={product.imgSrc}
+                addToCart={addToCart}
+              />
+            ))}
+          </div>
+        )}
+      </React.Fragment>
+    </TotalContext.Provider>
   );
 };
 

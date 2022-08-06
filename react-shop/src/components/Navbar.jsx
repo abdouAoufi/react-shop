@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink as Link, useNavigate } from "react-router-dom";
 import { ifUserLogged, logout } from "../database/users";
 import Cart from "./Cart";
 import cartImg from "../assets/images/cart.png";
 
 const Navbar = (props) => {
-  const { total, listProducts } = props;
+  const { listProducts } = props;
   const isLogged = ifUserLogged();
   const [isCartShow, setIsCartShow] = useState(false);
 
@@ -19,7 +19,7 @@ const Navbar = (props) => {
   };
 
   const onLogout = () => {
-    logout();
+    localStorage.clear();
     setTimeout(() => navigate("/login"), 1000);
   };
 
@@ -27,12 +27,9 @@ const Navbar = (props) => {
     <nav className='py-4 px-6 shadow '>
       <div className='flex justify-between'>
         <h3 className='text-2xl font-bold text-blue-500'>Shop</h3>
-        <Cart
-          products={listProducts}
-          total={total}
-          show={isCartShow}
-          hideCart={hideCart}
-        />
+        {isLogged && (
+          <Cart products={listProducts} show={isCartShow} hideCart={hideCart} />
+        )}
         {isLogged ? (
           <p
             onClick={onLogout}
@@ -52,13 +49,11 @@ const Navbar = (props) => {
         <Link to='/home' className='font-bold text-lg mx-2'>
           Home
         </Link>
-        {total !== undefined ? (
-          <img
-            src={cartImg}
-            onClick={showCart}
-            className=' cursor-pointer h-8 w-8 mx-2  hover:scale-125 ease-in duration-300'
-          />
-        ) : null}
+        <img
+          src={cartImg}
+          onClick={showCart}
+          className=' cursor-pointer h-8 w-8 mx-2  hover:scale-125 ease-in duration-300'
+        />
       </div>
     </nav>
   );

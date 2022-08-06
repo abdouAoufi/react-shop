@@ -35,7 +35,9 @@ const Product = (props) => {
           <p className='text-gray-400'>{discount || 0} %</p>
         </div>
         <button
-          onClick={() => addToCart({ price: price, title, imgSrc })}
+          onClick={() =>
+            addToCart({ price: price, title, imgSrc, quantity: 1 })
+          }
           className='px-2 py-0 bg-green-600 text-white rounded z-100'>
           Add to cart
         </button>

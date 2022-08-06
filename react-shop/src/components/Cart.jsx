@@ -1,8 +1,25 @@
+import { useContext } from "react";
 import CartIcon from "../assets/images/close.png";
+import { TotalContext } from "../pages/Home/Home";
 import CartItem from "./CartItem";
 
 const Cart = (props) => {
-  const { total, show, hideCart, products } = props;
+  const { show, hideCart, products } = props;
+  const { cartListProducts, setListCart } = useContext(TotalContext);
+  const initialValue = 0;
+  const total = cartListProducts.reduce((previousValue, currentValue) => {
+    return previousValue + currentValue.price * currentValue.quantity;
+  }, initialValue);
+
+  const changeQuantity = (title, quantity) => {
+    const newList = cartListProducts.map((item) => {
+      if (item.title === title) {
+        return { ...item, quantity: quantity };
+      }
+      return item;
+    });
+    setListCart(newList);
+  };
   return (
     <div
       style={{ width: "400px" }}
@@ -19,12 +36,14 @@ const Cart = (props) => {
           />
         </div>
         <h3 className='text-xl mt-4 font-bold text-bold text-gray-400'>
-          Total : {total} DZD
+          Total : {total || 0} DZD
         </h3>
 
         {products !== undefined &&
           products.map((item) => (
             <CartItem
+              changeQuantity={changeQuantity}
+              quantity={item.quantity}
               title={item.title}
               image={item.imgSrc}
               price={item.price}
